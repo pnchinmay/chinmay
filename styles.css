@@ -49,6 +49,7 @@ hr {
 /** lists **/
 .list-non-bullet {
     list-style: none;
+    padding: 0%;
 }
 
 .list-item-inline {
@@ -103,11 +104,15 @@ hr {
 /** section **/
 .section {
     padding: 2rem;
+    display: block;
 }
 .section h1{
     text-align: center;
 }
 
+.container-center p{
+    color: var(--dark-gray);
+}
 .ow {
     background-color: var(--off-white);
 }
