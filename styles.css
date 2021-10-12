@@ -118,6 +118,10 @@ hr {
     background-color: var(--off-white);
 }
 
+#projectList li:nth-child(odd) {
+    background-color: var(--off-white);
+}
+
 .footer {
     background-color: var(--primary-color);
     padding: 2rem 1rem;
