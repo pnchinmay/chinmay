@@ -15,6 +15,10 @@ hr {
     margin: 2rem 0rem;
 }
 
+article {
+    color: var(--dark-gray);
+}
+
 .container {
     padding-left: 1rem;
     padding-right: 1rem;
@@ -32,6 +36,10 @@ hr {
     border-radius: 0.5rem;
 }
 
+.link-blog {
+    text-decoration: none;
+    color: var(--primary-color);
+}
 
 .link-primary {
     background-color: var(--primary-color);
@@ -95,6 +103,13 @@ hr {
     margin: auto;
 }
 
+.hero .blog-img {
+    max-width: 80%;
+    width: 500px;
+    display: block;
+    margin: auto;
+}
+
 .hero .hero-heading {
     padding: 1rem;
     color: var(--dark-gray);
@@ -140,4 +155,30 @@ hr {
 
 .social-link {
     padding-inline-start: 0px;
+}
+
+pre {
+    height: auto;
+    max-height: 200px;
+    overflow: auto;
+    background-color: #eeeeee;
+    word-break: normal !important;
+    word-wrap: normal !important;
+    white-space: pre !important;
+    padding: 1rem;
+    margin: auto;
+}
+
+.inline-code {
+    font-size: 90%;
+    background: var(--off-white);
+    border-radius: 3px;
+    line-height: normal;
+    padding: 0.2em 0.4em;
+    font-family: monospace;
+    margin: 0em 0.2em;
+}
+
+.points {
+    padding: 1rem 0.5rem;
 }

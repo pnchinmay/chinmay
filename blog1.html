@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blogs | Chinmay Manas</title>
+  <link href="/styles.css" rel='stylesheet' />
+  <!-- CSS 1: Style tag
+    <style>
+        body {
+            color: red;
+        }
+    </style> -->
+</head>
+
+<body>
+
+  <nav class="navigation container">
+    <a class="nav-brand link" href="/">Chinmay Manas</a>
+    <!--check k's portfolio-->
+    <ul class="list-non-bullet nav-pills">
+      <li class="list-item-inline">
+        <a class="link" href="/">Home</a>
+      </li>
+      <li class="list-item-inline">
+        <a class="link" href="/projects.html">Projects</a>
+      </li>
+      <li class="list-item-inline link-active">
+        <a class="link" href="/blogs.html">Blogs</a>
+      </li>
+    </ul>
+  </nav>
+  <header class="hero">
+    <img class="blog-img" src="/images/dotfiles.jpg" />
+    <h1 class="hero-heading">Managing <span style="color: var(--primary-color)">dotfiles</span></h1>
+  </header>
+
+
+  <article class="container-center">
+    <h2>Introduction</h2>
+    <p>
+      Setting up dev environment on a new machine is tough and time taking. It usually works with several trial and
+      errors. As developers, we strive to minimize the time we spend on redundant things, like setting up our
+      environment, writing boilerplate code, and basically not doing anything that does not concern the fun part of
+      coding - building new stuff. However, it becomes a cakewalk if the machine is running a Unix-like system and
+      you've got a dotfiles management in place.
+      <br>
+      <br>
+      One of the main advantages of Unix-like systems is that everything is customizable. Dotfiles are usually
+      associated with specific programs installed on your system and are used to customize those programs/software.
+      <br>
+      <br>
+      These dotfiles change over time as you start customizing your machine according to your needs. Creating a back-up
+      of these files is necessary if in case something breaks and you want to go back to previous state. That's where
+      the dotfiles management comes into the picture. If you would break something, your dotfiles are right there to
+      back you up.
+    </p>
+
+    <h2>Possible approaches to dotfiles management</h2>
+    <p>
+      There are several approaches to managing dotfiles on your system.
+      <br>
+      <br>
+      <ol>
+        <li>
+          <h4>Symlinking</h4>
+          One of the basic ways is to create a repository and copy all the dotfiles in the git repo.
+          <br>
+          <br>
+          Then, create symlinks for all files at their apporpriate places.
+          <br>
+          <br>
+          This works well for the most part. But, it lacks automation. All the updation is to be done manually in this
+          setup. There's so much copy-pasting and symlinking involved.
+        </li>
+        <li>
+          <h4>Hacker Setup</h4>
+          One of the most elegant setup which doesn't involve any symlinking or extra tooling. Files are tracked on a
+          version control system and user can create different branches for different machines.
+          <br>
+          <br>
+          It uses a bare repository in a novel way, by configuring $HOME as the work tree.
+          <br>
+          <br>
+          The technique consists of storing a Git bare repository in a "side" folder (like $HOME/.cfg or
+          $HOME/.myconfig) using a specially crafted alias so that commands are run against that repository and not the
+          usual .git local folder, which would interfere with any other Git repositories around.
+          <br>
+          <br>
+          The entire setup can be up and running within minutes. The entire configuration can be replicated on new
+          system easily.
+        </li>
+      </ol>
+    </p>
+
+    <h2>
+      The best way to store your dotfiles: A bare Git repository
+    </h2>
+    <p>
+      <h3>
+        Starting from scratch
+      </h3>
+      If you haven't been tracking your configurations in a Git repository before, you can start using this technique
+      easily with these lines:
+      <br>
+      <br>
+      <pre>
+git init --bare $HOME/myconfig
+alias myconfig='/usr/bin/git --git-dir=$HOME/myconfig/ --work-tree=$HOME'
+myconfig config --local status.showUntrackedFiles no
+echo "alias myconfig='/usr/bin/git --git-dir=$HOME/myconfig/ --work-tree=$HOME'" >> $HOME/.bashrc
+      </pre>
+      <ul>
+        <li class="points">
+          The first line creates a folder <code class="inline-code">~/myconfig</code> which is a Git bare repository that will track our files.
+        </li>
+        <li class="points">
+          Then we create an alias <code class="inline-code">myconfig</code> which we will use instead of the regular <code class="inline-code">git</code> when we want to interact with our configuration repository.
+        </li>
+        <li class="points">
+          We set a flag - local to the repository - to hide files we are not explicitly tracking yet. This is so that when you type <code class="inline-code">myconfig status</code> and other commands later, files you are not interested in tracking will not show up as untracked.
+        </li>
+        <li class="points">
+          Also you can add the alias definition by hand to your <code class="inline-code">.bashrc</code> or use the the fourth line provided for convenience.
+        </li>
+        <li class="points">
+          Now, any file within the <code class="inline-code">$HOME</code> folder can be versioned with normal commands, replacing <code class="inline-code">git</code> with your newly created <code class="inline-code">myconfig</code> alias, like:
+          <br>
+          <br>
+          <pre>
+myconfig status
+myconfig add .vimrc
+myconfig commit -m "Add vimrc"
+myconfig add .bashrc
+myconfig commit -m "Add bashrc"
+myconfig push origin master
+          </pre>
+        </li>
+      </ul>
+
+      <h3>Migrating to this setup</h3>
+      If you already store your configuration/dotfiles in a Git repository, on a new system you can migrate to this setup with the following steps:
+      <ul>
+        <li class="points">
+          Prior to the installation make sure you have committed the alias to your <code class="inline-code">.bashrc</code> or <code class="inline-code">.zshrc</code>:
+          <br>
+          <br>
+          <pre>
+alias myconfig='/usr/bin/git --git-dir=$HOME/myconfig/ --work-tree=$HOME'
+          </pre>
+        </li>
+
+        <li class="points">
+          And that your source repository ignores the folder where you'll clone it, so that you don't create weird recursion problems:
+          <br>
+          <br>
+          <pre>
+echo "myconfig" >> .gitignore
+          </pre>
+        </li>
+
+        <li class="points">
+          Now clone your dotfiles into a bare repository in a in directory of your <code class="inline-code">$HOME</code>
+          <br>
+          <br>
+          <pre>
+git clone --bare <git-repo-url> $HOME/myconfig
+          </pre>
+        </li>
+
+        <li class="points">
+          Define the alias in the current shell scope:
+          <br>
+          <br>
+          <pre>
+alias myconfig='/usr/bin/git --git-dir=$HOME/myconfig/ --work-tree=$HOME'
+          </pre>
+        </li>
+
+        <li class="points">
+          Checkout the actual content from the bare repository to your <code class="inline-code">$HOME</code>:
+          <br>
+          <br>
+          <pre>
+myconfig checkout
+          </pre>
+        </li>
+
+        <li class="points">
+          The step above might fail with a message like:
+          <br>
+          <br>
+          <pre>
+error: The following untracked working tree files would be overwritten by checkout:
+    .bashrc
+    .gitignore
+Please move or remove them before you can switch branches.
+Aborting
+          </pre>
+          <br>
+          <br>
+          This is because your <code class="inline-code">$HOME</code> folder might already have some stock configuration files which would be overwritten by Git. The solution is simple: back up the files if you care about them, remove them if you don't care. I provide you with a possible rough shortcut to move all the offending files automatically to a backup folder:
+          <br>
+          <br>
+          <pre>
+mkdir -p .config-backup && \
+config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | \
+xargs -I{} mv {} .config-backup/{}
+          </pre>
+        </li>
+
+        <li class="points">
+          Re-run the check out if you had problems:
+          <br>
+          <br>
+          <pre>
+myconfig checkout
+          </pre>
+          <br>
+          <br>
+        </li>
+
+        <li class="points">
+          Set the flag <code class="inline-code">showUntrackedFiles</code> to no on this specific (local) repository:
+          <br>
+          <br>
+          <pre>
+myconfig config --local status.showUntrackedFiles no
+          </pre>
+          <br>
+          <br>
+        </li>
+
+        <li class="points">
+          You're done, from now on you can type <code class="inline-code">myconfig</code> commands to add and update your dotfiles:
+          <br>
+          <br>
+          <pre>
+myconfig status
+myconfig add .vimrc
+myconfig commit -m "Add vimrc"
+myconfig add .bashrc
+myconfig commit -m "Add bashrc"
+myconfig push
+          </pre>
+          <br>
+          <br>
+        </li>
+      </ul>
+      </ul>
+
+    </p>
+    <h2>Wrapping Up</h2>
+    <p>
+      I hope you find this technique useful to track your dotfiles. If you're curious, there's a HackerNews thread discussing all about managing dotfiles. Check it out <a class="link-blog" href="https://news.ycombinator.com/item?id=11070797" target="_blank">here</a>.
+    </p>
+  </article>
+
+
+
+
+
+
+
+  <footer class="footer">
+    <div class="footer-header">Want to connect?
+      My inbox is always open!</div>
+    <!-- <div class="footer-header">Connect with me</div> -->
+    <ul class="social-link list-non-bullet">
+      <li class="list-item-inline"><a class="link link-primary" href="mailto:manaschinmay0151@gmail.com">Gmail</a></li>
+      <li class="list-item-inline"><a class="link link-primary" href="https://github.com/pnchinmay/"
+          target="_blank">Github</a></li>
+      <li class="list-item-inline"><a class="link link-primary" href="https://www.linkedin.com/in/pnchinmay/"
+          target="_blank">Linkedin</a></li>
+      <li class="list-item-inline"><a class="link link-primary" href="https://twitter.com/ManasChinmay"
+          target="_blank">Twitter</a></li>
+    </ul>
+  </footer>
+
+</body>
+
+</html>
