@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blogs | Chinmay Manas</title>
+  <link href="/styles.css" rel='stylesheet' />
+  <!-- CSS 1: Style tag
+    <style>
+        body {
+            color: red;
+        }
+    </style> -->
+</head>
+
+<body>
+
+  <nav class="navigation container">
+    <a class="nav-brand link" href="/">Chinmay Manas</a>
+    <!--check k's portfolio-->
+    <ul class="list-non-bullet nav-pills">
+      <li class="list-item-inline">
+        <a class="link" href="/">Home</a>
+      </li>
+      <li class="list-item-inline">
+        <a class="link" href="/projects.html">Projects</a>
+      </li>
+      <li class="list-item-inline link-active">
+        <a class="link" href="/blogs.html">Blogs</a>
+      </li>
+    </ul>
+  </nav>
+  <header class="hero">
+    <img class="blog-img" src="/images/ubuntu.jpeg" />
+    <h1 class="hero-heading">Setting up Web Development environment on <span style="color: var(--primary-color)">Ubuntu</span></h1>
+  </header>
+
+
+  <article class="container-center">
+    <h2>Introduction</h2>
+    <p>
+        Lately I had to reinstall Ubuntu and I lost the configuration for the web development setup on my old machine. So, I thought I should put together a list of things that needs to be done to make the development workflow easier.
+    </p>
+
+    <h2>Get your system up to date</h2>
+    <p>
+        For updating Ubuntu, run the following commands in terminal
+      <pre>
+sudo apt update && sudo apt upgrade
+      </pre>
+    </p>
+
+    <h2>Install essentials</h2>
+    <p>
+        <h4>curl</h4>
+        Needed for API testing and for other network-related stuffs.
+        <br>
+        <br>
+      <pre>
+sudo apt install curl
+      </pre>
+
+        <h4>git</h4>
+        Needed for version control of your code
+        <br>
+        <br>
+        <pre>
+sudo apt install git
+        </pre>
+        <br>
+        <br>
+        You can configure it after that, so it doesn’t ask you for username all the time by typing these commands. Replace <code class="inline-code">name</code> and <code class="inline-code">email</code> with your github credentials.
+        <br>
+        <br>
+        <pre>
+git config --global user.name "name"
+git config --global user.email "email"
+        </pre>
+
+        <h4>Google Chrome</h4>
+        Needed for testing web apps
+        <br>
+        <br>
+        <pre>
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo apt install ./google-chrome-stable_current_amd64.deb
+        </pre>
+
+        <h4>Node.js and npm</h4>
+        For better management of versions of npm and node, we will be installing nvm. <br><br> nvm is version manager for node.js, designed to be installed per-user, and invoked per-shell. It allows you to quickly install and use different versions of node via the command line.<br><br>nvm works on any POSIX compliant-shell (bash, zsh, fish, dash)<br><br>Run the following commands to setup nvm for the current user.
+        <br>
+        <br>
+        <pre>
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+        </pre>
+        <br>
+        Verify installation by running the following command
+        <br>
+        <br>
+        <pre>
+command -v nvm
+        </pre>
+        <br>
+        Once installation is verified, run the following commands to install latest LTS versions of node and npm
+        <br>
+        <br>
+        <pre>
+nvm install --lts
+        </pre>
+        <br>
+        Check version of node and npm using the command 
+        <br>
+        <br>
+        <pre>
+nvm ls
+node -v
+npm -v
+        </pre>
+        <br>
+
+        <h4>Visual Studio Code</h4>
+        The editor that is mostly used by developers is VS Code. It has got several extensions in the marketplace as well as a built-in terminal.<br><br>Run the following commands to install VS Code.
+        <br>
+        <br>
+        <pre>
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
+sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+rm -f packages.microsoft.gpg
+sudo apt install apt-transport-https
+sudo apt update
+sudo apt install code
+        </pre>
+        <br>
+        Few extensions which I install to make it better are:- 
+        <ul>
+            <li class="points">
+                <strong>Prettier</strong> — great if you want to keep your code consistent and neat. You can customise it to work after saving by going to File>Preferences>Settings and looking for ‘Editor:Format On Save’. While you’re there you can also change auto-save settings to be triggered by onFocusChange.
+            </li>
+
+            <li class="points">
+                <strong>Bracket pair colorizer</strong> — just very useful. You can never trust yourself with bracket matching.
+            </li>
+
+            <li class="points">
+                <strong>REST Client</strong> — REST Client allows you to send HTTP request and view the response in Visual Studio Code directly.
+            </li>
+
+            <li class="points">
+                <strong>Live Server</strong> — Launch a development local Server with live reload feature for static & dynamic pages
+            </li>
+
+            <li class="points">
+                <strong>GitLens — Git supercharged</strong> — GitLens simply helps you better understand code. Quickly glimpse into whom, why, and when a line or code block was changed. Jump back through history to gain further insights as to how and why the code evolved. Effortlessly explore the history and evolution of a codebase.
+            </li>
+
+            <li class="points">
+                <strong>HTML CSS Support</strong> — CSS Intellisense for HTML
+            </li>
+        </ul>
+    </p>
+
+    <h2>Wrapping up</h2>
+    <p>
+        That’s it!
+        All you have to do is give your system a restart so it can get accustomed to all these changes.
+        Do you have anything else you do to your set up that others should to? I am always looking for optimisations to my workflow. Feel free to hit me up on Twitter or Linkedin.
+    </p>
+
+
+  </article>
+
+
+
+
+
+
+
+  <footer class="footer">
+    <div class="footer-header">Want to connect?
+      My inbox is always open!</div>
+    <!-- <div class="footer-header">Connect with me</div> -->
+    <ul class="social-link list-non-bullet">
+      <li class="list-item-inline"><a class="link link-primary" href="mailto:manaschinmay0151@gmail.com">Gmail</a></li>
+      <li class="list-item-inline"><a class="link link-primary" href="https://github.com/pnchinmay/"
+          target="_blank">Github</a></li>
+      <li class="list-item-inline"><a class="link link-primary" href="https://www.linkedin.com/in/pnchinmay/"
+          target="_blank">Linkedin</a></li>
+      <li class="list-item-inline"><a class="link link-primary" href="https://twitter.com/ManasChinmay"
+          target="_blank">Twitter</a></li>
+    </ul>
+  </footer>
+
+</body>
+
+</html>
